@@ -2,18 +2,60 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+charlotte = {
+    "id": 6,
+    "name": "Charlotte",
+    "children": []
+}
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+harrison = {
+    "id": 5,
+    "name": "Harrison",
+    "children": []
+}
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "email": self.email,
-            # do not serialize the password, its a security breach
-        }
+harry = {
+    "id": 4,
+    "name": "Harry",
+    "children": [harrison]
+}
+
+william = {
+    "id" : 3,
+    "name" : "William",
+    "children": [charlotte]
+}
+
+charles = {
+    "id": 2,
+    "name": "Charles",
+    "children": [william, harry]
+}
+
+elizabeth = {
+    "id": 1,
+    "name": "Elizabeth",
+    "children": [charles]
+}
+
+new_list = []
+
+def list_all(parent):
+    # your code goes here
+    for child in parent["children"]:
+        new_list.append(child)
+        return list_all(child)
+    return new_list
+
+def find_one(parent, id):
+    print("for loop initiated with " + parent["name"])
+    for child in parent["children"]:
+        print("testing for " + child["name"] + " with id " + str(child["id"]) + "==" + str(id))
+        if child["id"] == id:
+            print("if statement initiated")
+            return child
+        print("Not the id that we want, moving on")
+        return find_one(child, id)
+        
+
+# print(find_one(elizabeth, 6))
